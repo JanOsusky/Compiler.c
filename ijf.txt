@@ -1,0 +1,52 @@
+N = {<prog>, <st_list>, <stat>, <init_rhs>, <rhs>, <expr>, <type>, <in_param_init>, <in_param_list>, <in_param>, <out_param_init>, <out_param_list>}
+T = {?>, $, id, if, (, ), {, }, else, while, return, , , =, :, literal, type, function}
+P = {
+    1: <prog> -> ?>
+    2: <prog> -> <stat> <prog>
+    3: <prog> -> ɛ
+    4: <prog> -> function id (<out_param_init>) : <type> {<st_list>} <prog>
+    5: <st_list> -> ɛ
+    6: <st_list> -> <stat> <st_list>
+    7: <stat> -> <init_rhs> ;
+    8: <init_rhs> -> $id = <rhs>
+    9: <init_rhs> -> <rhs>
+    10: <rhs> -> <expr>
+    11: <rhs> -> id (<in_param_init>)
+    12: <stat> -> if (<expr>) {<st_list>} else {<st_list>}
+    13: <stat> -> while (<expr>) {<st_list>}
+    14: <stat> -> return <expr> ;
+    15: <in_param_init> -> ɛ
+    16: <in_param_init> -> <in_param> <in_param_list>
+    17: <in_param_list> -> , <in_param> <in_param_list>
+    18: <in_param_list> -> ɛ
+    19: <in_param> -> $id
+    20: <in_param> -> literal
+    21: <expr> -> předání řízení precedenční analýze
+    22: <type> -> type
+    23: <type> -> null
+    24: <out_param_init> -> ɛ
+    25: <out_param_init> -> type $id <out_param_list>
+    26: <out_param_list> -> , type $id <out_param_list>
+    27: <out_param_list> -> ɛ
+}
+
+--------------------------------
+
+N = {E}
+T = {+ , - , * , / , . , < , > , <= , >=, ===, !==, (, ), i, literal}
+P = {
+    1: E -> E+E
+    2: E -> E-E
+    3: E -> E*E
+    4: E -> E/E
+    5: E -> E.E
+    6: E -> E<E
+    7: E -> E>E
+    8: E -> E<=E
+    9: E -> E>=E
+    10: E -> E===E
+    11: E -> E!==E
+    12: E -> (E)
+    13: E -> i
+    14: E -> literal
+}
