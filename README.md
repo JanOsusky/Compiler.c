@@ -1,275 +1,238 @@
-> FAKULTA INFORMAČNÍCH TECHNOLOGIÍ VYSOKÉ UČENÍ TECHNICKÉ V BRNĚ
+# FACULTY OF INFORMATION TECHNOLOGIES HIGHER TECHNICAL EDUCATION IN BRNO
 >
-> ![](vertopal_fae3b0e5fc834e4eae81e6332c25e483/media/image1.png){width="4.25in"
-> height="1.926388888888889in"}
+> ![](vertopal_fae3b0e5fc834e4eae81e6332c25e483/media/image1.png)
 >
-> Projektová dokumentace
+# Project documentation
 >
-> **Implementace překladače imperativního** **jazyka IFJ22**\
-> Tým xproch0q varianta I BVS
+# **Implementation of imperative translator** **language IFJ22**\
+> Team xproch0q variant I BVS
 
-+-----------------+-----------------+-----------------+-----------------+
-| 7\. prosince    | Vojtěch Adámek  | > (xadame44)    | > 25 %\         |
-| 2022            |                 |                 | > 25 %\         |
-|                 |                 |                 | > 25 % 25 %     |
-+=================+=================+=================+=================+
-|                 | Tomáš Najman    | > (xnajma03)    |                 |
-+-----------------+-----------------+-----------------+-----------------+
-|                 | Jan Osuský      | > (xosusk00)    |                 |
-+-----------------+-----------------+-----------------+-----------------+
-|                 | > **David       |                 |                 |
-|                 | > Procházka     |                 |                 |
-|                 | > (xproch0q)**  |                 |                 |
-+-----------------+-----------------+-----------------+-----------------+
 
-**Úvod**
+**Introduction**
 
-> Cílem projektu bylo naprogramovat program v jazyce C, který načte
-> zdrojový kód
+> The aim of the project was to program a program in the C language that would load
+> source code
 >
-> zapsaný ve zdrojovém jazyce IFJ22 a přeloží jej do cílového jazyka
+> written in the IFJ22 source language and translates it into the target language
 > IFJcode22
 >
-> (mezikód). Jestliže proběhne celý překlad bez chyb, vrací se návratová
-> hodnota „0".
+> (intermediate code). If the entire translation takes place without errors, a return is returned
+> value "0".
 
-**Implementace**
+**Implementation**
 
-> Popis implementací jednotlivých částí potřebných a celkové
-> funkcionalitě
+> Description of the implementation of individual parts needed and overall
+> functionality
 >
-> **Lexikální analýza**\
-> První částí překladače je **scanner**, který načítá a „zjišťuje"
-> jednotlivé **lexémy** a předává je **parseru** v podobě tokenů.
-> Scanner byl implenetován podle předem vytvořeného diagramu
-> deterministického konečného automatu bez **epsilon** přechodů. Diagram
-> automatu najdete na konci dokumentace obrázek 1.
+> **Lexical Analysis**\
+> The first part of the translator is the **scanner**, which reads and "detects"
+> individual **lexems** and passes them to the **parser** in the form of tokens.
+> The scanner was implemented according to a previously created diagram
+> deterministic finite automaton without **epsilon** transitions. Diagram
+> machine, you can find figure 1 at the end of the documentation.
 >
-> Scanner je implementován v souborech **scanner.c** a v hlavičce
-> **scanner.h**. Hlavní funkcí t[é]{.underline}to části je
-> **get_token(lexToken \*token)**, kde se neustále načítají znaky ze
-> standardního vstupu pomocí funkce **getchar()**. Konečný automat je
-> implementován, jako jednoduchý **switch**, kde každý případ je jeden
-> stav KA. Konečné stavy jsou definovány v hlavičce jako makra pomocí
+> Scanner is implemented in the files **scanner.c** and in the header
+> **scanner.h**. The main function of this part is
+> **get_token(lexToken \*token)** where the characters from are constantly read
+> standard input using the **getchar()** function. The ultimate automaton is
+> implemented as a simple **switch**, where each case is one
+> KA status. The final states are defined in the header as macros using
 > #define**.**
 >
-> Scanner zapíše řetězec tokenu do struktury **lexToken**. V případě
-> chyby se vrátí
+> Scanner writes the token string into the **lexToken** structure. When
+> errors will be returned
 >
-> odpovídající **ERROR_CODE** **(číslo)**, podle chyby při načítání nebo
+> corresponding **ERROR_CODE** **(number)**, according to loading error or
 >
-> **ERROR_NO_ERROR** v případě úspěchu.
+> **ERROR_NO_ERROR** on success.
 >
-> **Syntaktická analýza**\
-> Druhá a nejdůležitější část překladače je implementována v souborech
-> **parser.c** a v hlavičce **parser.h**. **Parser** řídí celý průběh
-> překladu a je brán jako kostra.
+> **Syntax parsing**\
+> The second and most important part of the compiler is implemented in files
+> **parser.c** and in the header **parser.h**. The **Parser** controls the entire process
+> translation and is taken as a skeleton.
 >
-> Syntaktická analýza se řídí vytvořenou LL-gramatikou a metodou
-> rekurzivního
+> Syntax analysis follows the established LL-grammar and method
+> recursive
 >
-> sestupu (zhora dolů). Každému pravidlu v naší vytvořené LL-gramatice
-> odpovídá jedna
+> descent (from top to bottom). To each rule in our constructed LL-grammar
+> one answers
 >
-> funkce v **parser.c**. Naše LL-gramatika je na konci dokumentace
-> obrázek 2 a 3.
+> function in **parser.c**. Our LL-grammar is at the end of the documentation
+> picture 2 and 3.
 >
-> Hlavní funkcí **parseru** je funkce **parser()** volaná v souboru
-> **main.c**. Načte se první token a podle kontroly prvního pravidla se
-> volají další funkce na kontrolu pravidel. Celý **parser** dále funguje
-> rekurzivně. Pro načtení nových tokenů se používá definované makro
+> The main **parser** function is the **parser()** function called in the file
+> **main.c**. The first token is loaded and according to the first rule check,
+> they call other functions to check the rules. The entire **parser** continues to work
+> recursively. A defined macro is used to load new tokens
 > **GET_NEXT_TOKEN**.
 >
-> Když **parser** při kontrole pravidel zjistí chybu, tak vrátí
-> **ERROR_BAD_SYNTAX**, jinak vrací hodnotu **ERROR_NO_ERROR**, což je
-> hodnota 0.
+> When the **parser** detects an error while checking the rules, it returns
+> **ERROR_BAD_SYNTAX** otherwise returns **ERROR_NO_ERROR** which is
+> value 0.
 >
-> Když **parser** dojde k výrazu, zavolá se funkce na precedenční
-> analýzu **analyze(&ParserData)**, kde se předá celá struktura
+> When **parser** encounters an expression, the function on precedent is called
+> parse **parse(&ParserData)** where the entire structure is passed
 > **ParserData.**
 >
-> **Sémantická analýza**
+> **Semantic Analysis**
 >
-> Sémantická analýza probíhá souběžně se syntaktickou analýzou. Pomocí
-> tabulky
+> Semantic analysis takes place simultaneously with syntactic analysis. Help
+> tables
 >
-> symbolů, která je implementována jako binární vyhledávací strom a má
-> pomocné
+> of symbols which is implemented as a binary search tree and has
+> helpful
 >
-> funkce, se kontroluje, zda byly funkce a proměnné definovány, tyto
-> funkce si sám volá
+> function, it is checked whether functions and variables have been defined, these
+> the function calls itself
 
 2
 
-> **parser**. Kontrola proměnných probíhá v **parseru** za pomocí
-> tabulky symbolů pro proměnné a kontrola funkcí stejně.
+> **parser**. Variable checking takes place in the **parser** using
+> symbol tables for variables and checking functions as well.
 
-**Zpracování výrazů**\
-Výrazy jsou analyzovány odděleně v souborech **precanal.c** av hlavičce
-**precanal.h**. Hlavní funkcí je**analyze(ParserData \*data)**, kterou
-si volá **parser**. Funkce si načte první token a v případě úspěchu
-vrátí číslo 0, jinak vrací číslo **ERROR** odpovídající zjištěné chybě.
-Zpracování výrazů probíhá pomocí precedenční analýzy (zdola nahoru).
-Nový token je porovnán s tokenem na vrcholu vytvořeného zásobníku, kde
-na začátku je do něj vložen znak dolaru, a podle precedenční tabulky
-**table** je umístěn na zásobník, nebo je výraz zpracován podle pravidel
-v rámci funkce **reduce**. Precedenční tabulka je na konci dokumentace
-obrázek 4.
+**Expression Processing**\
+Expressions are analyzed separately in the **precanal.c** files and in the header
+**precanal.h**. The main function is **parse(ParserData \*data)** which
+calls itself **parser**. The function retrieves the first token and on success
+returns the number 0, otherwise returns the number **ERROR** corresponding to the detected error.
+Expression processing takes place using precedent analysis (from bottom to top).
+The new token is compared to the token at the top of the created stack where
+a dollar sign is inserted into it at the beginning, and according to the precedent table
+**table** is placed on the stack, or the expression is processed according to the rules
+within the **reduce** function. The precedent table is at the end of the documentation
+figure 4.
 
-> **Hodnoty v tabulce:**
+> **Values in the table:**
 >
-> 1.'\<' znamená, že načtený znak je přidán na zásobník (funkce
+> 1.'\<' means that the loaded character is added to the stack (function
 > **shift**)
 
-2.'\>' znamená, že se uplatní pravidlo voláním funkce **reduce**
+2.'\>' means that the rule will be applied by calling the **reduce** function
 
-> 3.'=' znamená, že se redukují závorky
+> 3.'=' means that the parentheses are reduced
 >
-> 4.' ' sémantická chyba
+> 4.' ' semantic error
 >
-> 5.'#' úspěšný návrat
+> 5.'#' successful return
 >
-> **Generátor kódu**
+> **Code Generator**
 >
-> **Abstraktní datové struktury**
+> **Abstract Data Structures**
 
-Popis použitých datových struktur
+Description of the data structures used
 
-> **Tabulka symbolů**\
-> Tabulku symbolů jsme řešili formou rekurzivního binárního
-> vyhledávacího stromu.
+> **Table of Symbols**\
+> We solved the symbol table in the form of recursive binary
+> search tree.
 
-Rekurzivní implementaci jsme zvolili pro její jednoduchost, která nám
-umožnila rychlé
+We chose the recursive implementation for its simplicity, which we
+made it possible to quickly
 
-programování základních operací nad binárním stromem, díky čemuž jsme se
-mohli dříve
+programming basic operations over a binary tree, thanks to which we
+they could earlier
 
-věnovat složitějším problémům.
+to address more complex problems.
 
-> Tabulka je rozdělená na dvě části: tabulka symbolů pro funkce a
-> tabulka symbolů pro
+> The table is divided into two parts: a table of symbols for functions and
+> symbol table for
 
-proměnné. Jedna instance tabulky symbolů pro proměnné je použita pro
-hlavní tělo programu. Ostatní lokální tabulky proměnných (např. pro
-proměnné ve funkcích) jsou pak uspořádány na
-
-zásobníku tabulek symbolů pro proměnné. Díky zásobníku lze určovat,
-kterou proměnnou
-
-použít při zanořování.
-
-> **Tabulka symbolů pro proměnné**\
-> Uchovává následující informace:
-
-+-----------------------------------+-----------------------------------+
-| > •\                              | > název proměnné\                 |
-| > •\                              | > datový typ\                     |
-| > •\                              | > zdali může obsahovat NULL       |
-| > •                               | > definice proměnné               |
-+===================================+===================================+
-+-----------------------------------+-----------------------------------+
+variables. One instance of the symbol table for variables is used for
+the main body of the program. Other local variable tables (e.g. for
+variables in functions) are then arranged to
++----------------------------------+------------- ---------------------+
+| > •\ | > variable name\ |
+| > •\ | > datatype\ |
+| > •\ | > whether it can contain NULL |
+| > • | > variable definition |
++===================================+============= ======================+
++----------------------------------+------------- ---------------------+
 
 3
 
-> **Tabulka symbolů pro funkce**\
-> Uchovává následující informace:\
-> • název funkce\
-> • počet parametrů\
-> • seznam parametrů\
-> • definice funkce\
-> • návratová hodnota
+> **Table of symbols for functions**\
+> Stores the following information:\
+> • function name\
+> • number of parameters\
+> • parameter list\
+> • function definition\
+> • return value
 >
-> **Zásobník pro práci s výrazy**\
-> Zásobník je implementován v souborech **precstack.c** a
+> **Stack for working with expressions**\
+> The stack is implemented in the files **precstack.c** and
 > **precstack.h**.
 
-Do zásobníku se ukládá struktura **prec_elem_t** datový typ tokenu a
-jestli je to terminál. Pro zásobník jsou implementovány funkce jako
+The structure **prec_elem_t** data type token and is stored in the stack
+if it is a terminal. Functions like
 **init, push, pop, free**.
 
-> **Vázaný seznam pro generátor**
+> **Linked list for generator**
 
-**Dynamický řetězec**\
-Struktura se využívá pro uchování řetězce tokenu, obsahuje délku atd.
-Pro řetězec jsou implementovány funkce jako **dynStrInit, addChar**.
+**Dynamic String**\
+The structure is used to hold the token string, contains the length, etc.
+Functions like **dynStrInit, addChar** are implemented for string.
 
-**Testování**
+**Testing**
 
-Testování probíhalo manuálně po celou dobu vývoje.
+Testing was done manually throughout development.
 
-**Práce v týmu**
+**Team work**
 
-> Tým jsme vytvořili přes Discord, převážně jsme se ale znali z týmu z
-> minulého roku. Na
+> We created the team via Discord, but mostly we knew each other from the z team
+> last year. On
 
-komunikaci jsme používali Discord a Messenger. Na schůzkách ve škole,
-jsme se vždy jen domlouvali, co je potřeba udělat, jak by mělo, co
-fungovat a zadávali jsme si termíny. Termíny
+we used Discord and Messenger to communicate. At school meetings,
+we always just agreed on what needed to be done, how it should be done, what
+function and we entered dates. Terms
 
-jsme měli rozepsané také na Microsoft Planneru. Některé části řešil
-každý člen sám, u těžších částí jsme si navzájem pomáhali. Ke konci
-odevzdání jsme využívali nejvíce Discord pro hovory a sdílení obrazovek.
+we also had it written out on Microsoft Planner. He solved some parts
+each member alone, we helped each other with the more difficult parts. End
+submission, we mostly used Discord for calls and screen sharing.
 
-> **Sdílení kódu**\
-> Využili jsme technologií, které nabízí GitHub. Tím pádem se nám
-> upravování sdíleného kódu zjednodušilo. Programovali jsme ve Visual
-> Studio Code a Sublime.
+> **Code Sharing**\
+> We used the technology offered by GitHub. Thus, we
+> made editing shared code easier. We programmed in Visual
+> Studio Code and Sublime.
 
 4
 
-**Rozdělení práce**
 
-+-----------------------------------+-----------------------------------+
-| > Člen                            | > Práce na projektu               |
-+===================================+===================================+
-| > Vojtěch Adámek                  | > Parser, Prec. analýza, Tabulka  |
-|                                   | > symbolů                         |
-+-----------------------------------+-----------------------------------+
-| > Tomáš Najman                    | > Prec. analýza, zásobník,        |
-|                                   | > Dokumentace                     |
-+-----------------------------------+-----------------------------------+
-| > Jan Osuský                      | > Parser, LL-gramatika            |
-+-----------------------------------+-----------------------------------+
-| **David Procházka**               | > Vedoucí týmu, LL-gramatika,     |
-|                                   | > Scanner, Parser, KA             |
-+-----------------------------------+-----------------------------------+
 
-**Závěr**
+**Conclusion**
 
-Projekt byl rozsáhlý, ale snažili jsme se využít všechny naše dovednosti
-i z jiných předmětů na škole. Projekt nám dal cenné zkušenosti v rámci
-programování, práce v týmu a domluvy, a hlavně rozvržení času pro
-budoucí velké projekty.
+The project was large, but we tried to use all our skills
+also from other subjects at school. The project gave us valuable experience within
+programming, team work and agreements, and especially time allocation for
+future major projects.
 
-> **Diagram konečného automatu**
+> **Finite State Machine Diagram**
 
 ![](vertopal_fae3b0e5fc834e4eae81e6332c25e483/media/image2.png){width="6.301388888888889in"
 height="4.588888888888889in"}
 
-*konečný automat přijímající jazyk IFJ22 obr. 1*
+*finite automaton receiving language IFJ22 Fig. 1*
 
 5
 
-**LL-gramatika**
+**LL-grammar**
 
 ![](vertopal_fae3b0e5fc834e4eae81e6332c25e483/media/image3.png){width="6.301388888888889in"
 height="3.3in"}
 
-*LL-gramatika seznam pravidel obr. 2*
+*LL-grammar list of rules Fig. 2*
 
 ![](vertopal_fae3b0e5fc834e4eae81e6332c25e483/media/image4.png){width="6.301388888888889in"
 height="2.85in"}
 
-*LL-gramatika seznam pravidel obr. 3*
+*LL-grammar list of rules Fig. 3*
 
 6
 
-> **Tabulka pro precedenční analýzu**
+> **Table for precedent analysis**
 
-![](vertopal_fae3b0e5fc834e4eae81e6332c25e483/media/image5.png){width="6.301388888888889in"
-height="3.0166666666666666in"}
+stack of symbol tables for variables. Thanks to the stack, it is possible to determine
+which variable
 
-*tabulka pro správnou funkcionalitu precedenční analýzy obr. 4*
+use when diving.
 
-7
+> **Table of symbols for variables**\
+> Stores the following information:
